@@ -1,0 +1,32 @@
+name: Deploy Application
+
+on:
+  workflow_run:
+    workflows: ["Build and Push Docker Image"]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Deploy Application
+      run: |
+            # Aplicar manifestos do Kubernetes para implantar os contêineres
+    kubectl apply -f deployment.yaml
+
+    # Aguardar até que os recursos estejam prontos
+    kubectl wait --for=condition=Available deployment/my-deployment --timeout=300s
+
+    # Expor o serviço para o mundo exterior (se necessário)
+    kubectl expose deployment my-deployment --type=LoadBalancer --name=my-service
+
+    # Obter o endereço IP ou nome do host para acesso externo (se aplicável)
+    EXTERNAL_IP=$(kubectl get svc my-service -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    HOSTNAME=$(kubectl get svc my-service -o jsonpath='{.status.loadBalancer.ingress[0].hostname}')
+
+    echo "A aplicação está disponível em http://$EXTERNAL_IP ou http://$HOSTNAME"
