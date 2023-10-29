@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: async-worker-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: async-worker
+  template:
+    metadata:
+      labels:
+        app: async-worker
+    spec:
+      containers:
+        - name: async-worker
+          image: my-async-worker-image:1.0.0
+          ports:
+            - containerPort: 9000

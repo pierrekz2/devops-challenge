@@ -1,0 +1,9 @@
+FROM shipay_devops_challenge_base_image
+
+WORKDIR /app
+
+COPY . .
+
+RUN pip install poetry && poetry install
+
+CMD ["poetry", "run", "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: base-image-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: base-image
+  template:
+    metadata:
+      labels:
+        app: base-image
+    spec:
+      containers:
+        - name: base-image
+          image: my-base-image:1.0.0
+          ports:
+            - containerPort: 8080

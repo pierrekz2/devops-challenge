@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-rest-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-rest
+  template:
+    metadata:
+      labels:
+        app: api-rest
+    spec:
+      containers:
+        - name: api-rest
+          image: my-api-rest-image:1.0.0
+          ports:
+            - containerPort: 8000

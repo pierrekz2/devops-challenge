@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  api_rest:
+    image: api_rest_image
+    networks:
+      - mynetwork
+    depends_on:
+      - kafka
+    restart: always
+
+  async_worker:
+    image: async_worker_image
+    networks:
+      - mynetwork
+    depends_on:
+      - kafka
+    restart: always
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+    networks:
+      - mynetwork
+    restart: always
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    environment:
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
+    ports:
+      - "9092:9092"
+    networks:
+      - mynetwork
+    restart: always
+
+networks:
+  mynetwork:
+

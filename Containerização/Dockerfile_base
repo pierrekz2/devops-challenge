@@ -1,0 +1,9 @@
+FROM python:3.9
+
+COPY cert.pem /etc/ssl/certs/
+COPY key.pem /etc/ssl/private/
+
+RUN apt-get update && apt-get install -y curl
+
+ENV SSL_CERT_FILE=/etc/ssl/certs/cert.pem
+ENV SSL_KEY_FILE=/etc/ssl/private/key.pem
